@@ -1,0 +1,63 @@
+<script type="text/javascript">
+    RED.nodes.registerType('join-message',{
+        category: 'function',
+        color: '#a6bbcf',
+        defaults: {
+            name: {value:""},
+            text: {value:""},
+            title: {value:""},
+            deviceName: {value:"",required:true},
+            apiKey: {value:"",required:true},
+            server: {value:"",type:"remote-server"}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "join.png",
+        label: function() {
+            return this.name||"Join Push";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="join-message">
+    <div class="form-row">
+        <label for="node-input-server"><i class="icon-tag"></i> Server</label>
+        <input type="text" id="node-input-server" placeholder="Server">
+    </div>
+    <div class="form-row">
+        <label for="node-input-apiKey"><i class="icon-tag"></i> Join API Key</label>
+        <input type="text" id="node-input-apiKey" placeholder="API Key">
+    </div>
+    <div class="form-row">
+        <label for="node-deviceName"><i class="icon-tag"></i> Device Name</label>
+        <input type="text" id="node-input-deviceName" placeholder="Device Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-text"><i class="icon-tag"></i> Text</label>
+        <input type="text" id="node-input-text" placeholder="Text">
+    </div>
+    <div class="form-row">
+        <label for="node-input-title"><i class="icon-tag"></i> Title</label>
+        <input type="text" id="node-input-title" placeholder="Title">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="join-message">
+    <p>Send pushes to your devices with Join</p>
+
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>apikey <span class="property-type">string</span></dt>
+        <dd> your Join API Key. </dd>
+        <dt>devices <span class="property-type">string</span></dt>
+        <dd> a comma separated list of device names you want to send the push to.</dd>
+        <dt>text <span class="property-type">string</span></dt>
+        <dd> Text to send in the push. If it creates a notification, will be the notification's text</dd>
+        <dt class="optional">title <span class="property-type">string</span></dt>
+        <dd> If set will create a notification with this title.</dd>
+    </dl>
+</script>

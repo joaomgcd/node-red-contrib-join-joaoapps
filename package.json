@@ -1,0 +1,22 @@
+{
+  "name": "node-red-contrib-join-joaoapps",
+  "version": "1.0.0",
+  "description": "Join by JoaoApps for Node-Red",
+  "main": "join-message.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "join"
+  ],
+  "author": "João Dias",
+  "license": "ISC",
+  "node-red": {
+    "nodes": {
+      "join-message": "join-message.js"
+    }
+  },
+  "dependencies": {
+    "node-fetch": "^2.0.0"
+  }
+}
