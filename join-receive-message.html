@@ -1,0 +1,44 @@
+<script type="text/javascript">
+    RED.nodes.registerType('join-receive-message',{
+        category: 'function',
+        color: '#a6bbcf',
+        defaults: {
+            name: {value:""},
+            command: {value:"",required:true},
+            variables: {value:""},
+            server: {value:"",required:true,type:"join-server"},
+        },
+        inputs:0,
+        outputs:1,
+        icon: "join.png",
+        label: function() {
+            return this.name||"Join Receive Message";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="join-receive-message">
+    <div class="form-row">
+        <label for="node-input-server"><i class="icon-server"></i> Server</label>
+        <input type="text" id="node-input-server" placeholder="Server">
+    </div>
+    <div class="form-row">
+        <label for="node-input-command"><i class="icon-filter"></i> Command Filter</label>
+        <input type="text" id="node-input-command" placeholder="Command Filter">
+    </div>
+    <div class="form-tips">Part on the left of =:=.</div>
+    <div class="form-row">
+        <label for="node-input-variables"><i class="icon-tag"></i> Variables</label>
+        <input type="text" id="node-input-variables" placeholder="Variables">
+    </div>
+    <div class="form-tips">Comma separated list. Set the name of each part on the right of =:=.</div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="join-receive-message">
+    <p>Receive pushes from other devices</p>
+    <p>Join uses the AutoApps Command System. Click <a href="https://joaoapps.com/autoapps-command-system/">here</a> for more info</p>
+</script>

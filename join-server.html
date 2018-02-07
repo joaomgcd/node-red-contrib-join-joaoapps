@@ -1,0 +1,24 @@
+<script type="text/javascript">
+    RED.nodes.registerType('join-server',{
+        category: 'config',
+        color: '#a6bbcf',
+        defaults: {
+            name: {value:""},
+            port: {value:"1820",required:true}
+        },
+        label: function() {
+            return this.name||"Join Server";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="join-server">
+    <div class="form-row">
+        <label for="node-config-input-port"><i class="icon-hubspot"></i> Port</label>
+        <input type="text" id="node-config-input-port" placeholder="Port to receive messages in">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-config-input-name" placeholder="Name">
+    </div>
+</script>

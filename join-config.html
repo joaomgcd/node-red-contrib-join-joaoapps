@@ -1,0 +1,24 @@
+<script type="text/javascript">
+    RED.nodes.registerType('join-config',{
+        category: 'config',
+        color: '#a6bbcf',
+        defaults: {
+            name: {value:""},
+            apiKey: {value:"",required:true}
+        },
+        label: function() {
+            return this.name||"Join Config";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="join-config">
+    <div class="form-row">
+        <label for="node-config-input-apiKey"><i class="icon-key"></i> Join API Key</label>
+        <input type="text" id="node-config-input-apiKey" placeholder="API Key">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-config-input-name" placeholder="Name">
+    </div>
+</script>

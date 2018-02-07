@@ -13,6 +13,9 @@
   "license": "ISC",
   "node-red": {
     "nodes": {
+      "join-config": "join-config.js",
+      "join-server": "join-server.js",
+      "join-receive-message": "join-receive-message.js",
       "join-message": "join-message.js"
     }
   },
