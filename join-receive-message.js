@@ -19,6 +19,7 @@ var AutoAppsCommand = function(message, variables){
         for (var i = 0; i < variables.length && i < commandParts.length- 1 ; i++) {
             var variable = variables[i];
             var commandPart = commandParts[i+1];
+            if(!commandPart) continue;
             payload[variable] = commandPart;
         }
         return payload;
@@ -36,7 +37,7 @@ module.exports = function(RED) {
         var server = RED.nodes.getNode(config.server);
         var variables = [];
         server.events.on("command", command => {
-            node.log(`Got message from server: ${command}`);
+            node.log(`Parsing command "${command}" with variables "${config.variables}"`);
             var autoAppsCommand = new AutoAppsCommand(command,config.variables);
             var isMatch = autoAppsCommand.isMatch(config.command);
             node.log(`"${config.command}" matches "${autoAppsCommand.command}": ${isMatch}`);
