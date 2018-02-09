@@ -20,6 +20,7 @@
     }
   },
   "dependencies": {
+    "ip": "^1.1.5",
     "node-fetch": "^2.0.0"
   }
 }

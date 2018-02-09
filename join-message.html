@@ -7,7 +7,7 @@
             text: {value:""},
             title: {value:""},
             deviceName: {value:"",required:true},
-            apiKey: {value:"",type:"join-config",required:true}
+            joinConfig: {type:"join-config",required:true}
         },
         inputs:1,
         outputs:1,
@@ -20,8 +20,8 @@
 
 <script type="text/x-red" data-template-name="join-message">
     <div class="form-row">
-        <label for="node-input-apiKey"><i class="icon-tag"></i> Join API Key</label>
-        <input type="text" id="node-input-apiKey" placeholder="API Key">
+        <label for="node-input-joinConfig"><i class="icon-tag"></i> Join Configuration</label>
+        <input type="text" id="node-input-joinConfig" placeholder="Join Configuration">
     </div>
     <div class="form-row">
         <label for="node-deviceName"><i class="icon-tag"></i> Device Name</label>
