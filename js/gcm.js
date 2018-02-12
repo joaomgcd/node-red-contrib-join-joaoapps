@@ -5,8 +5,8 @@ module.exports = {
 		    node.log(`Found class type ${gcm}...`);
 			gcm.fromJsonString(json);
 			gcm.execute(node);
-		}catch(e){			
-	        node.log(`Didn't find type ${type}...`);
+		}catch(e){
+	        node.log(`Error process GCM: ${e}`);
 		}
 	}
 }

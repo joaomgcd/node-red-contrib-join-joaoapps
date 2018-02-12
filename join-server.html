@@ -1,3 +1,8 @@
+<style type="text/css">
+    #registerOnServer{
+        width: 100%;
+    }
+</style>
 <script type="text/javascript">
     RED.nodes.registerType('join-server',{
         category: 'config',
@@ -7,8 +12,35 @@
             port: {value:"1820",required:true},
             joinConfig: {type:"join-config",required:true}
         },
+        credentials: {
+            deviceId: {type:"text",value:"",required:true}
+        },
         label: function() {
             return this.name||"Join Server";
+        },
+        oneditprepare:function(){
+            /*document.querySelector("#registerOnServer").onclick = e =>{
+                var node = this;
+                var config = node;
+                console.log(node);
+                var joinConfig = RED.nodes.getNode(config.joinConfig);        
+                if(!joinConfig){
+                    return node.log (`Can't register device. User has not configured Join yet`);
+                }
+                var options = {
+                    "apikey":joinConfig.credentials.apikey,
+                    "deviceName":joinConfig.credentials.deviceName,
+                    "port":config.port,
+                    "deviceId":globalContext.get("joindeviceid")
+                };
+                node.log(`Sending registration: ${JSON.stringify(options)}`)
+                joinapi.registerInJoinServer(node,options)
+                .then(deviceId=>{
+                    if(!deviceId) return;
+                    globalContext.set("joindeviceid",deviceId);
+                    node.log (`Saved device id: ${globalContext.get("joindeviceid")}`);
+                });
+            }*/
         }
     });
 </script>
@@ -26,4 +58,7 @@
         <label for="node-config-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-config-input-name" placeholder="Name">
     </div>
+    <!--<div class="form-row">
+        <input type="button" id="registerOnServer" value="Register This Device" class="editor-button"></input>
+    </div>-->
 </script>

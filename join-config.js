@@ -6,5 +6,10 @@ module.exports = function(RED) {
         this.deviceName = config.deviceName;
         
     }
-    RED.nodes.registerType("join-config",JoinConfigNode);
+    RED.nodes.registerType("join-config",JoinConfigNode,{
+        credentials: {
+            apikey: {type:"text",required:true},
+            deviceName: {type:"text",value:"Node-RED",required:true}
+        }
+    });
 }

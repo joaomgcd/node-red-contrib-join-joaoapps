@@ -6,8 +6,10 @@
             name: {value:""},
             text: {value:""},
             title: {value:""},
-            deviceName: {value:"",required:true},
             joinConfig: {type:"join-config",required:true}
+        },
+        credentials: {
+            deviceName: {type:"text",value:"",required:true}
         },
         inputs:1,
         outputs:1,
@@ -17,14 +19,13 @@
         }
     });
 </script>
-
 <script type="text/x-red" data-template-name="join-message">
     <div class="form-row">
         <label for="node-input-joinConfig"><i class="icon-tag"></i> Join Configuration</label>
         <input type="text" id="node-input-joinConfig" placeholder="Join Configuration">
     </div>
     <div class="form-row">
-        <label for="node-deviceName"><i class="icon-tag"></i> Device Name</label>
+        <label for="node-input-deviceName"><i class="icon-tag"></i> Device Name</label>
         <input type="text" id="node-input-deviceName" placeholder="Device Name">
     </div>
     <div class="form-row">

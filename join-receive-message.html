@@ -6,6 +6,7 @@
             name: {value:""},
             command: {value:"",required:true},
             variables: {value:""},
+            parseNumbers: {value:true},
             server: {value:"",required:true,type:"join-server"},
         },
         inputs:0,
@@ -17,6 +18,15 @@
     });
 </script>
 
+<style type="text/css">
+    .form-tips{
+        margin-bottom: 48px; 
+    }
+    input[type=checkbox]{
+        display: inline;
+        width: auto;
+    }
+</style>
 <script type="text/x-red" data-template-name="join-receive-message">
     <div class="form-row">
         <label for="node-input-server"><i class="icon-server"></i> Server</label>
@@ -32,6 +42,11 @@
         <input type="text" id="node-input-variables" placeholder="Variables">
     </div>
     <div class="form-tips">Comma separated list. Set the name of each part on the right of =:=.</div>
+    <div class="form-row">
+        <input type="checkbox" id="node-input-parseNumbers" placeholder="Variables">
+        <label for="node-input-parseNumbers">Parse Numbers</label>
+    </div>
+    <div class="form-tips">If enabled, will output numbers as real ints and not strings containing numbers</div>
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">

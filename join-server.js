@@ -1,41 +1,12 @@
 
-const ip = require("ip");
-const web = require("./js/web");
+const joinapi = require("./js/joinapi");
 const http = require("http");
 const url = require("url");
 const gcm = require("./js/gcm");
+
 const EventEmitter = require('events');
 class CommandEmitter extends EventEmitter {}
 module.exports = function(RED) {
-	function registerInJoinServer(node,config){
-        var joinConfig = RED.nodes.getNode(config.joinConfig);
-        if(!joinConfig){
-			return node.log (`Can't register device. User has not configured Join yet`);
-        }
-        //node.log (`Join config: ${JSON.stringify(joinConfig)}`);
-        if(!joinConfig.apikey){
-			return node.log (`Can't register device. User has not configured API KEY yet`);
-        }
-		var ipAddress = ip.address();
-		node.log (`IP Address: ${ipAddress}`);
-		web.post(`http://localhost:8080/_ah/api/registration/v1/registerDevice/`,{
-			"apikey":joinConfig.apikey,
-			"regId": `${ipAddress}:${config.port}`,
-			"regId2": `${ipAddress}:${config.port}`,
-			"deviceName":joinConfig.deviceName,
-			"deviceType":13
-		},node)
-		.then(result=>{
-    		if(!result.success){
-    			return node.error(result.errorMessage);
-    		}
-			node.log (`Registered device: ${result.deviceId}`);
-    	})
-    	.catch(error=>{
-            node.status({fill:"red",shape:"dot",text:error});
-            node.error(error, msg);
-        })
-	}
     function JoinServerNode(config) {
         RED.nodes.createNode(this,config);
         var node = this;
@@ -47,8 +18,9 @@ module.exports = function(RED) {
         	node.log(`Reporting command: ${command}`);
         	node.events.emit('command',command);
         }
+        var globalContext = this.context().global;
         const app = http.createServer((request, response) => {
-        node.log(`Got request: ${request.method} => ${request.method}`);
+          //node.log(`Got request: ${request.method} => ${request.method}`);
 		  var query = url.parse(request.url, true).query;
 		  if(query){
 		  	node.reportCommand(query.message)
@@ -60,7 +32,7 @@ module.exports = function(RED) {
 			}).on('end', () => {
 			  body = Buffer.concat(body).toString();
 			  var gcmRaw = JSON.parse(body);
-    		  node.log(`GCM Raw: ${gcmRaw.type} => ${gcmRaw.json}`);
+    		  //node.log(`GCM Raw: ${gcmRaw.type} => ${gcmRaw.json}`);
 			  gcm.executeGcm(node, gcmRaw.type,gcmRaw.json);
 			});
 		  }
@@ -70,7 +42,25 @@ module.exports = function(RED) {
 		});
 		app.listen(Number.parseInt(this.port));
 		this.on('close', ()=>app.close());
-		registerInJoinServer(node,config);
+        var joinConfig = RED.nodes.getNode(config.joinConfig);        
+        if(!joinConfig){
+			return node.log (`Can't register device. User has not configured Join yet`);
+        }
+        var existingDeviceId = globalContext.get("joindeviceid");
+        if(existingDeviceId) return;
+        var options = {
+			"apikey":joinConfig.credentials.apikey,
+			"deviceName":joinConfig.credentials.deviceName,
+			"port":config.port,
+			"deviceId":existingDeviceId
+		};
+		node.log(`Sending registration: ${JSON.stringify(options)}`)
+		joinapi.registerInJoinServer(node,options)
+		.then(deviceId=>{
+			if(!deviceId) return;
+			globalContext.set("joindeviceid",deviceId);
+			node.log (`Saved device id: ${globalContext.get("joindeviceid")}`);
+		});
     }
     RED.nodes.registerType("join-server",JoinServerNode);
 }

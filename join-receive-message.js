@@ -1,35 +1,7 @@
 
 var fetch = require('node-fetch');
-var AutoAppsCommand = function(message, variables){
+const AutoAppsCommand = require("./js/autoappscommand");
 
-    var me = this;
-    var getPayload = function(){
-        var payload = message;
-        if(typeof variables == "string"){
-                variables = variables.split(",");
-        }
-        if(!variables || variables.length == 0 || message.indexOf("=:=")<0){
-            return payload;
-        }
-        var commandParts = message.split("=:=");
-        if(commandParts.length == 0){
-            return payload;
-        }
-        payload = {"command":commandParts[0]};
-        for (var i = 0; i < variables.length && i < commandParts.length- 1 ; i++) {
-            var variable = variables[i];
-            var commandPart = commandParts[i+1];
-            if(!commandPart) continue;
-            payload[variable] = commandPart;
-        }
-        return payload;
-    }
-    this.payload = getPayload();
-    this.command = this.payload["command"] ? this.payload.command : this.payload;
-    this.isMatch = function(configuredCommand){
-        return me.command == configuredCommand;
-    }
-}
 module.exports = function(RED) {
     function JoinReceiveMessageNode(config) {
         RED.nodes.createNode(this,config);
@@ -38,7 +10,9 @@ module.exports = function(RED) {
         var variables = [];
         server.events.on("command", command => {
             node.log(`Parsing command "${command}" with variables "${config.variables}"`);
-            var autoAppsCommand = new AutoAppsCommand(command,config.variables);
+            var autoAppsCommand = new AutoAppsCommand(command,config.variables,{
+                "parseNumbers": config.parseNumbers
+            });
             var isMatch = autoAppsCommand.isMatch(config.command);
             node.log(`"${config.command}" matches "${autoAppsCommand.command}": ${isMatch}`);
             if(!isMatch) {                
