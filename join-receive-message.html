@@ -9,7 +9,7 @@
             parseNumbers: {value:true},
             server: {value:"",required:true,type:"join-server"},
         },
-        inputs:0,
+        inputs:1,
         outputs:1,
         icon: "join.png",
         label: function() {
@@ -56,4 +56,26 @@
 <script type="text/x-red" data-help-name="join-receive-message">
     <p>Receive pushes from other devices</p>
     <p>Join uses the AutoApps Command System. Click <a href="https://joaoapps.com/autoapps-command-system/">here</a> for more info</p>
+    <p>Can optionally receive messages from the input as text from <code>msg.payload</code></p>
+     <h3>Outputs</h3>
+     <ol class="node-ports">
+         <li>Payload
+             <dl class="message-properties">
+                 <dt>payload <span class="property-type">string or object</span></dt>
+                 <dd>If a command contains =:= and variables are defined it'll be an object with all the variables. Otherwise it'll be a string with the received command</dd>
+             </dl>
+         </li>
+         <li>Push
+             <dl class="message-properties">
+                 <dt>push <span class="property-type">object</span></dt>
+                 <dd>the full contents of the received push.</dd>
+             </dl>
+         </li>
+         <li>Sender ID
+             <dl class="message-properties">
+                 <dt>senderId <span class="property-type">string</span></dt>
+                 <dd>If a full push was received will contain the device ID of the device that sent the message.</dd>
+             </dl>
+         </li>
+     </ol>
 </script>

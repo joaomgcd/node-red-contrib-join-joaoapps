@@ -14,5 +14,15 @@ module.exports = {
 		}*/
     	return fetch(url,options)
     	.then(res=>res.json())
+	},
+	get : function(url, node){
+		var options = {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}
+    	return fetch(url)
+    	.then(res=>res.json())
 	}
 }

@@ -1,13 +1,29 @@
 module.exports = {
-	executeGcm : function(node, type, json){
-		try{
-			var gcm = new classes[type]();
-		    node.log(`Found class type ${gcm}...`);
-			gcm.fromJsonString(json);
-			gcm.execute(node);
-		}catch(e){
-	        node.log(`Error process GCM: ${e}`);
+	executeGcm : function(node, gcmRaw){
+		var gcm = this.getGcm(node,gcmRaw);
+		if(!gcm) return;
+		gcm.execute(node);
+	},
+	getGcm : function(node, gcmRaw){
+		if(typeof gcmRaw === 'string'){
+			try{
+				gcmRaw = JSON.parse(gcmRaw);				
+			}catch(e){
+				return null;
+			}
 		}
+		try{
+			var type = gcmRaw.type;
+			var json = gcmRaw.json;
+			if(!type || !json) return null;
+			var gcm = new classes[type]();
+		    //node.log(`Found class type ${type}...`);
+			gcm.fromJsonString(json);
+			return gcm;
+		}catch(e){
+	        node.log(`Error processing GCM: ${e}`);
+		}
+		return null;
 	}
 }
 
@@ -15,7 +31,7 @@ class GCM {
 	constructor(){
 	}
 	execute(node) {
-		node.log(this);
+//		node.log(this);
 	}
 	fromJson(json) {
 		for (var prop in json) {
@@ -33,7 +49,7 @@ class GCMPush extends GCM {
 		super();
 	}
 	execute(node) {
-		node.log(this);
+//		node.log(this);
   	  	node.reportCommand(this.push.text);
 	}
 }

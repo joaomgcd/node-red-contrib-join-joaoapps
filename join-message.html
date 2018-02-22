@@ -6,10 +6,12 @@
             name: {value:""},
             text: {value:""},
             title: {value:""},
+            icon: {value:""},
             joinConfig: {type:"join-config",required:true}
         },
         credentials: {
-            deviceName: {type:"text",value:"",required:true}
+            deviceId: {type:"text",value:""},
+            deviceName: {type:"text",value:""}
         },
         inputs:1,
         outputs:1,
@@ -19,15 +21,29 @@
         }
     });
 </script>
+<style type="text/css">
+    .form-tips{
+        margin-bottom: 48px; 
+    }
+    input[type=checkbox]{
+        display: inline;
+        width: auto;
+    }
+</style>
 <script type="text/x-red" data-template-name="join-message">
     <div class="form-row">
         <label for="node-input-joinConfig"><i class="icon-tag"></i> Join Configuration</label>
         <input type="text" id="node-input-joinConfig" placeholder="Join Configuration">
     </div>
     <div class="form-row">
+        <label for="node-input-deviceId"><i class="icon-tag"></i> Device ID</label>
+        <input type="text" id="node-input-deviceId" placeholder="Device ID">
+    </div>
+    <div class="form-row">
         <label for="node-input-deviceName"><i class="icon-tag"></i> Device Name</label>
         <input type="text" id="node-input-deviceName" placeholder="Device Name">
     </div>
+    <div class="form-tips">You must set either the Device Id or Device Name</div>
     <div class="form-row">
         <label for="node-input-text"><i class="icon-tag"></i> Text</label>
         <input type="text" id="node-input-text" placeholder="Text">
@@ -36,6 +52,12 @@
         <label for="node-input-title"><i class="icon-tag"></i> Title</label>
         <input type="text" id="node-input-title" placeholder="Title">
     </div>
+    <div class="form-tips">If set will create a notification on the receiving device</div>
+    <div class="form-row">
+        <label for="node-input-icon"><i class="icon-tag"></i> Icon URL</label>
+        <input type="text" id="node-input-icon" placeholder="Icon URL">
+    </div>
+    <div class="form-tips">Must be a publicly accessible URL for an image</div>
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
@@ -49,11 +71,15 @@
     <dl class="message-properties">
         <dt>apikey <span class="property-type">string</span></dt>
         <dd> your Join API Key. </dd>
+        <dt>deviceIds or senderId <span class="property-type">string</span></dt>
+        <dd> a comma separated list of device ids you want to send the push to.</dd>
         <dt>devices <span class="property-type">string</span></dt>
         <dd> a comma separated list of device names you want to send the push to.</dd>
         <dt>text <span class="property-type">string</span></dt>
         <dd> Text to send in the push. If it creates a notification, will be the notification's text</dd>
         <dt class="optional">title <span class="property-type">string</span></dt>
         <dd> If set will create a notification with this title.</dd>
+        <dt class="optional">icon <span class="property-type">string</span></dt>
+        <dd> If set will set the notification's icon to this. Must be a publicly accessible URL for an image.</dd>
     </dl>
 </script>
