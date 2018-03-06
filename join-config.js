@@ -3,6 +3,9 @@ module.exports = function(RED) {
      function JoinConfigNode(config) {
         RED.nodes.createNode(this,config);
         var node = this;
+        if(node.credentials.apikey){
+            node.credentials.apikey = node.credentials.apikey.trim();
+        }
         this.apikey = node.credentials.apikey;
         this.deviceName = node.credentials.deviceName;
         var runSetup = async ()=>{            

@@ -3,6 +3,7 @@ const joinapi = require("./js/joinapi");
 const http = require("http");
 const url = require("url");
 const gcm = require("./js/gcm");
+const IpGetter = require("./js/ipgetter");
 
 const EventEmitter = require('events');
 class CommandEmitter extends EventEmitter {}
@@ -12,6 +13,7 @@ module.exports = function(RED) {
     function JoinServerNode(config) {
         RED.nodes.createNode(this,config);
         var node = this;
+        node.config = config;
         this.events = new CommandEmitter();
         this.port = config.port;
         node.log(`Starting server on port ${this.port}...`);
@@ -20,7 +22,6 @@ module.exports = function(RED) {
         	//node.log(`Reporting command: ${command}`);
         	node.events.emit('command',command);
         }
-        var globalContext = this.context().global;
         const app = http.createServer((request, response) => {
         	// Set CORS headers
 			response.setHeader('Access-Control-Allow-Origin', '*');
@@ -53,13 +54,34 @@ module.exports = function(RED) {
 		});
 		app.listen(Number.parseInt(this.port));
 		this.on('close', ()=>app.close());
+        sendRegistration(node);
+       
+    }
+    async function sendRegistration(node){
+        var globalContext = node.context().global;
+    	var config = node.config;
         var joinConfig = RED.nodes.getNode(config.joinConfig);        
         if(!joinConfig){
 			return node.log (`Can't register device. User has not configured Join yet`);
         }
-        var existingDeviceId = globalContext.get("joindeviceid");
+		var ips = await new IpGetter(node.credentials.localIp,node.credentials.publicIp).getIps();
+		var lastIps = localStorage.getItem("lastIps");
+		var lastLocalIp = null;
+		var lastPublicIp = null;
+		if(lastIps){
+			//node.log("Found lastIps: " + lastIps);
+			//node.log("Found Ips: " + JSON.stringify(ips));
+			lastIps = JSON.parse(lastIps);
+			lastLocalIp = lastIps.localIp;
+			lastPublicIp = lastIps.publicIp;
+		}
+ 		var existingDeviceId = globalContext.get("joindeviceid");
         node.deviceId = existingDeviceId;
-        if(existingDeviceId) return;
+        if(lastLocalIp == ips.localIp && lastPublicIp == ips.publicIp){
+        	node.log("Not registering device because IPs are the same.")
+        	return;
+        }
+
 		existingDeviceId = localStorage.getItem('deviceId');
         var options = {
 			"apikey":joinConfig.credentials.apikey,
@@ -69,15 +91,23 @@ module.exports = function(RED) {
 		if(existingDeviceId){
 			options.deviceId = existingDeviceId;
 		}
+		Object.assign(options,ips);
 		node.log(`Sending registration: ${JSON.stringify(options)}`)
 		joinapi.registerInJoinServer(node,options)
 		.then(deviceId=>{
 			if(!deviceId) return;
+			globalContext.set("joindeviceid",deviceId);
+			localStorage.setItem("lastIps",JSON.stringify(ips));
 			globalContext.set("joindeviceid",deviceId);
 			localStorage.setItem('deviceId', deviceId);
     		node.deviceId = deviceId;
 			//node.log (`Saved device id: ${globalContext.get("joindeviceid")}`);
 		});
     }
-    RED.nodes.registerType("join-server",JoinServerNode);
+    RED.nodes.registerType("join-server",JoinServerNode,{
+        credentials: {
+            publicIp: {type:"text",value:"",required:false},
+            localIp: {type:"text",value:"",required:false}
+        }
+    });
 }

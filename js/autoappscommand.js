@@ -34,15 +34,25 @@ module.exports = class AutoAppsCommand {
         }
         payload = {"command":commandParts[0]};
         this.values = [];
-        for (var i = 0; i < this.variables.length && i < commandParts.length- 1 ; i++) {
+        var lastVariable = null;
+        for (var i = 0; i < commandParts.length- 1 ; i++) {
             var variable = this.variables[i];
-
+            if(variable){
+                lastVariable = variable;
+            }
             var commandPart = commandParts[i+1];
             if(!commandPart) continue;
             
             this.values.push(commandPart);
             commandPart = this.parseNumberIfCan(commandPart);
-            payload[variable] = commandPart;
+            if(payload[lastVariable]){
+                if(!(payload[lastVariable] instanceof Array)){
+                    payload[lastVariable] = [payload[lastVariable]];
+                }
+                payload[lastVariable].push(commandPart);
+            }else{
+                payload[lastVariable] = commandPart;   
+            }
         }
         return payload;
     }
