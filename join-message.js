@@ -16,7 +16,7 @@ module.exports = function(RED) {
         	push.apikey = joinConfig.credentials.apikey || msg.apikey;
         	push.title = config.title || msg.title;
             push.text = config.text ||  msg.text;
-            push.icon = config.icon ||  msg.icon;
+            push.icon = config.notificationicon ||  msg.icon;
             if(!push.text && util.isString(msg.payload)){
                 push.text = msg.payload;
             }
@@ -47,8 +47,8 @@ module.exports = function(RED) {
     }
     RED.nodes.registerType("join-message",JoinMessageNode, {
         credentials: {
-            deviceName: {type:"text",value:""},
-            deviceId: {type:"text",value:""}
+            deviceName: {type:"text",value:"",required:false},
+            deviceId: {type:"text",value:"",required:false}
         }
     });
 }
