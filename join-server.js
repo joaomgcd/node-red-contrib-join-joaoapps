@@ -53,7 +53,9 @@ module.exports = function(RED) {
 		  response.end();
 		});
 		app.listen(Number.parseInt(this.port));
-		this.on('close', ()=>app.close());
+		this.on('close', ()=>{
+			app.close();
+		});
         sendRegistration(node);
        
     }
