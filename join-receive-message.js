@@ -46,9 +46,11 @@ module.exports = function(RED) {
             node.send(msg);
         }
         server.events.on("command", command => {
+            node.log(`Received command from server: ${command}`);
             handleIncomingMessage(command);
         });
         node.on('input', function(msg) {
+            node.log(`Received command from node input: ${command}`);
             handleIncomingMessage(msg.payload);            
         });
         var node = this;

@@ -19,7 +19,7 @@ module.exports = function(RED) {
         node.log(`Starting server on port ${this.port}...`);
         node.reportCommand = command => {
         	if(!command) return;
-        	//node.log(`Reporting command: ${command}`);
+        	node.log(`Reporting command from server: ${command}`);
         	node.events.emit('command',command);
         }
         const app = http.createServer((request, response) => {
@@ -36,7 +36,7 @@ module.exports = function(RED) {
           //node.log(`Got request: ${request.method} => ${request.method}`);
 		  var query = url.parse(request.url, true).query;
 		  if(query){
-		  	node.reportCommand(query.message)
+		  	node.reportCommand(query.message);
 		  }
 		  if(request.method == "POST"){
 		  	let body = [];
