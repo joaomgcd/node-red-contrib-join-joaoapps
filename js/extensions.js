@@ -24,3 +24,14 @@ Object.defineProperty(Array.prototype, "count", {
     	return this.filter(filter).length;
     }
 });
+Object.defineProperty(Array.prototype, "unique", {
+    value: function unique(selector) {
+		var result = []
+		for(var item of this){
+			var key = selector(item);
+			if(result.find(existing => selector(existing) == key)) continue;
+			result.push(item)
+		}
+		return result;
+	}
+});

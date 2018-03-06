@@ -47,9 +47,11 @@ module.exports = class Join {
 			}
 		}
 		if(!devices || devices.length == 0) throw "No devices to send push to";		
+		devices = Devices.fromArray(devices.unique(device=>device.deviceId));
 		if(!push.senderId){
 			push.senderId = options.node.deviceId;
 		}
+		//options.node.log(`Sending to ${devices.map(device=>device.deviceName)}`)
 		return devices.sendPush(push,options);
 	}
 	sendCommand(command,deviceFilter,options){
