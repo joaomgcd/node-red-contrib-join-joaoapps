@@ -45,18 +45,19 @@ module.exports = function(RED) {
             //node.log(`Sending message to flow: ${JSON.stringify(msg)}`);
             node.send(msg);
         }
-        var eventListener = command => {
+        node.eventListener = command => {
             //node.log(`Received command from server 2: ${command}`);
             handleIncomingMessage(command);
         };
-        server.events.on("command", eventListener);
+        node.log(`Added listener for commands`);
+        RED.nodes.getNode(config.server).events.on("command", node.eventListener);
         node.on('input', function(msg) {
             //node.log(`Received command from node input: ${command}`);
             handleIncomingMessage(msg.payload);            
         });
         node.on('close', ()=>{
-            //node.log(`Removed listener for commands`);
-            server.events.removeListener("command",eventListener);
+            node.log(`Removed listener for commands`);
+            server.events.removeListener("command",node.eventListener);
         });
     }
     RED.nodes.registerType("join-receive-message",JoinReceiveMessageNode);

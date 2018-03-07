@@ -9,16 +9,20 @@ const EventEmitter = require('events');
 class CommandEmitter extends EventEmitter {}
 var LocalStorage = require("node-localstorage").LocalStorage
 var localStorage = new LocalStorage('./joinserver');
+const eventEmitter = new CommandEmitter();
 module.exports = function(RED) {
     function JoinServerNode(config) {
         RED.nodes.createNode(this,config);
         var node = this;
         node.config = config;
-        this.events = new CommandEmitter();
+        this.events = eventEmitter;
+        //this.events.id = node.id;
+    	//node.log(`Emitter: ${node.events.id}`)
         this.port = config.port;
         node.log(`Starting server on port ${this.port}...`);
         node.reportCommand = command => {
         	if(!command) return;
+        	//node.log(`Emitter: ${node.events.id}`)
         	//node.log(`Reporting command from server: ${command}`);
         	node.events.emit('command',command);
         }
