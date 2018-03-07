@@ -67,7 +67,7 @@ module.exports = function(RED) {
 			return node.log (`Can't register device. User has not configured Join yet`);
         }
 		var ips = await new IpGetter(node.credentials.localIp,node.credentials.publicIp).getIps();
-		var lastIps = localStorage.getItem("lastIps");
+		var lastIps = globalContext.get("lastIps");
 		var lastLocalIp = null;
 		var lastPublicIp = null;
 		if(lastIps){
@@ -99,7 +99,7 @@ module.exports = function(RED) {
 		.then(deviceId=>{
 			if(!deviceId) return;
 			globalContext.set("joindeviceid",deviceId);
-			localStorage.setItem("lastIps",JSON.stringify(ips));
+			globalContext.set("lastIps",JSON.stringify(ips));
 			globalContext.set("joindeviceid",deviceId);
 			localStorage.setItem('deviceId', deviceId);
     		node.deviceId = deviceId;
