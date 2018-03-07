@@ -49,14 +49,14 @@ module.exports = function(RED) {
             //node.log(`Received command from server 2: ${command}`);
             handleIncomingMessage(command);
         };
-        node.log(`Added listener for commands`);
+        //node.log(`Added listener for commands`);
         RED.nodes.getNode(config.server).events.on("command", node.eventListener);
         node.on('input', function(msg) {
             //node.log(`Received command from node input: ${command}`);
             handleIncomingMessage(msg.payload);            
         });
         node.on('close', ()=>{
-            node.log(`Removed listener for commands`);
+            //node.log(`Removed listener for commands`);
             server.events.removeListener("command",node.eventListener);
         });
     }
