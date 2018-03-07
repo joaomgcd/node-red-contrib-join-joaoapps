@@ -46,16 +46,16 @@ module.exports = function(RED) {
             node.send(msg);
         }
         var eventListener = command => {
-            node.log(`Received command from server 2: ${command}`);
+            //node.log(`Received command from server 2: ${command}`);
             handleIncomingMessage(command);
         };
         server.events.on("command", eventListener);
         node.on('input', function(msg) {
-            node.log(`Received command from node input: ${command}`);
+            //node.log(`Received command from node input: ${command}`);
             handleIncomingMessage(msg.payload);            
         });
         node.on('close', ()=>{
-            node.log(`Removed listener for commands`);
+            //node.log(`Removed listener for commands`);
             server.events.removeListener("command",eventListener);
         });
     }

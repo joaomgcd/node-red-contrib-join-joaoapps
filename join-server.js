@@ -19,7 +19,7 @@ module.exports = function(RED) {
         node.log(`Starting server on port ${this.port}...`);
         node.reportCommand = command => {
         	if(!command) return;
-        	node.log(`Reporting command from server: ${command}`);
+        	//node.log(`Reporting command from server: ${command}`);
         	node.events.emit('command',command);
         }
         const app = http.createServer((request, response) => {
