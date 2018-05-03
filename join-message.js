@@ -14,7 +14,8 @@ module.exports = function(RED) {
             push.deviceIds = node.credentials.deviceId || msg.senderId || msg.deviceId || msg.deviceIds;
             push.deviceNames = node.credentials.deviceName || msg.devices;   
         	push.apikey = joinConfig.credentials.apikey || msg.apikey;
-        	push.title = config.title || msg.title;
+            push.title = config.title || msg.title;
+            push.url = config.url || msg.url;
             push.text = config.text ||  msg.text;
             push.icon = config.notificationicon ||  msg.icon;
             if(!push.text && util.isString(msg.payload)){
