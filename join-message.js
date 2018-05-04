@@ -10,14 +10,14 @@ module.exports = function(RED) {
         var joinConfig = RED.nodes.getNode(config.joinConfig);
         node.join = new Join(joinConfig.credentials.apikey);
         node.on('input', async function(msg) {
-        	var push ={};
-            push.deviceIds = node.credentials.deviceId || msg.senderId || msg.deviceId || msg.deviceIds;
-            push.deviceNames = node.credentials.deviceName || msg.devices;   
-        	push.apikey = joinConfig.credentials.apikey || msg.apikey;
-            push.title = config.title || msg.title;
-            push.url = config.url || msg.url;
-            push.text = config.text ||  msg.text;
-            push.icon = config.notificationicon ||  msg.icon;
+        	var push = msg.push || {};
+            push.deviceIds = node.credentials.deviceId || msg.senderId || msg.deviceId || msg.deviceIds || push.deviceId || push.deviceIds;
+            push.deviceNames = node.credentials.deviceName || msg.devices || push.devices;   
+        	push.apikey = joinConfig.credentials.apikey || msg.apikey || push.apikey;
+            push.title = config.title || msg.title || push.title;
+            push.url = config.url || msg.url || push.url;
+            push.text =  config.text ||  msg.text || push.text;
+            push.icon = config.notificationicon ||  msg.icon || push.icon;
             if(!push.text && util.isString(msg.payload)){
                 push.text = msg.payload;
             }
