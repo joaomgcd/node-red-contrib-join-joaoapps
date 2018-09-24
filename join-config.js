@@ -8,6 +8,7 @@ module.exports = function(RED) {
         }
         this.apikey = node.credentials.apikey;
         this.deviceName = node.credentials.deviceName;
+        this.register = config.register;
         var runSetup = async ()=>{            
             /*var deviceListResult = await joinapi.listDevices(this.apikey);
             if(!deviceListResult.success){

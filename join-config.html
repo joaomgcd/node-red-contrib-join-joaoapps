@@ -4,6 +4,7 @@
         color: '#a6bbcf',
         defaults: {
             name: {value:""},
+            register:{value:true},
         },
         label: function() {
             return this.name||"Join Config";
@@ -11,17 +12,48 @@
         credentials: {
             apikey: {type:"text", required:true},
             deviceName: {type:"text", value:"Node-RED",required:true}
-        }
+        },
+        oneditprepare: function(){
+            $("#node-config-input-registration").change(function() {
+                if($("#node-config-input-registration").is(":checked")){
+                    $("#deviceNameDiv").show();
+                }else{
+                    $("#deviceNameDiv").hide();
+                    $("#node-config-input-deviceName").val("")
+                }
+            })
+        },
     });
+</script>
+
+<style type="text/css">
+    .form-tips{
+        margin-bottom: 48px; 
+    }
+    #regdevice{
+        display: inline;
+    }
+</style>
+
+<script type="text/x-red" data-help-name="join-config">
+    <p>Configure the Join API</p>
+    <h3>API Key</h3>
+    <p>You can get Your join api Key from <a href="https://joinjoaomgcd.appspot.com/">joinjoaomgcd.appspot.com</a></p>
+    <h3>Register Device</h3>
+    <p>When Register device is checked a new device will be created</p>
 </script>
 
 <script type="text/x-red" data-template-name="join-config">
     <div class="form-row">
-        <label for="node-config-input-apikey"><i class="icon-key"></i> Join API Key</label>
+        <label for="node-config-input-apikey"><i class="fa fa-key"></i> Join API Key</label>
         <input type="text" id="node-config-input-apikey" placeholder="API Key">
     </div>
-    <div class="form-row">
-        <label for="node-config-input-deviceName"><i class="icon-key"></i> Device Name</label>
+    <div class="form-row" id="regdevice">
+        <input type="checkbox" id="node-config-input-register" checked>
+        <label for="node-config-input-register">Register Device</label>
+    </div>
+    <div class="form-row" id="deviceNameDiv">
+        <label for="node-config-input-deviceName"><i class="fa fa-key"></i> Device Name</label>
         <input type="text" id="node-config-input-deviceName" placeholder="Device Name">
     </div>
     <div class="form-row">
