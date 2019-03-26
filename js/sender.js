@@ -74,7 +74,7 @@ class SenderGCM extends Sender{
 				'Content-Type': 'application/json; charset=UTF-8'
 			}
 		}
-		var url = "https://gcm-http.googleapis.com/gcm/send";
+		var url = "https://fcm.googleapis.com/fcm/send";
 		return fetch(url, postOptions).then(result=>{
 			if(result.status == 200) return result.json();
 			return result.text().then(text => Promise.reject(text));

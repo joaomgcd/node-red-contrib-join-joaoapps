@@ -56,6 +56,7 @@ module.exports = function(RED) {
 		  response.write(`OK`);
 		  response.end();
 		});
+		app.on('error', e => node.log(`Error starting server: ${e}`));
 		app.listen(Number.parseInt(this.port));
 		this.on('close', ()=>{
 			app.close();
@@ -64,7 +65,7 @@ module.exports = function(RED) {
 		if(joinConfig.register){
 			node.log(`Sending Registration ${joinConfig.deviceName}`)
 			sendRegistration(node);
-		}      
+		}   
 	}
 	
 	
@@ -76,7 +77,7 @@ module.exports = function(RED) {
 			return node.log (`Can't register device. User has not configured Join yet`);
 		}
 		node.log (`Saved device Name: ${joinConfig.credentials.deviceName}`);
-		var ips = await new IpGetter(node.credentials.localIp,node.credentials.publicIp).getIps();
+		var ips = await new IpGetter(node.credentials.localIp,node.credentials.publicIp,node).getIps();
 		var lastIps = globalContext.get("lastIps");
 		var lastLocalIp = null;
 		var lastPublicIp = null;
