@@ -31,15 +31,17 @@ module.exports = function(RED) {
             try{
                 
                 const password = joinConfig.encryptionKey;
-                const e = text => Encryption.encrypt(text,password);
-                push.text = await e(push.text);
-                push.url = await e(push.url);
-                push.smsnumber = await e(push.smsnumber);
-                push.smstext = await e(push.smstext);
-                push.clipboard = await e(push.clipboard);
-                push.file = await e(push.file);
-                push.files = await e(push.files);
-                push.wallpaper = await e(push.wallpaper);
+                if(password){
+                    const e = text => Encryption.encrypt(text,password);
+                    push.text = await e(push.text);
+                    push.url = await e(push.url);
+                    push.smsnumber = await e(push.smsnumber);
+                    push.smstext = await e(push.smstext);
+                    push.clipboard = await e(push.clipboard);
+                    push.file = await e(push.file);
+                    push.files = await e(push.files);
+                    push.wallpaper = await e(push.wallpaper);
+                }
         
                 var result = await node.join.sendPush(push,null,{"node":node});
                 //node.log(`Push results - Sucess: ${result.success}; Failure: ${result.failure}`);
