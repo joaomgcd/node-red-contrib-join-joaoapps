@@ -8,6 +8,8 @@ module.exports = function(RED) {
         }
         this.apikey = node.credentials.apikey;
         this.deviceName = node.credentials.deviceName;
+        this.salt = node.credentials.encryptionAccount;
+        this.encryptionKey = node.credentials.encryptionKey;
         this.register = config.register;
         var runSetup = async ()=>{            
             /*var deviceListResult = await joinapi.listDevices(this.apikey);
@@ -33,10 +35,19 @@ module.exports = function(RED) {
         runSetup();
         
     }
+    RED.httpAdmin.get('/js/*', function(req, res){
+        var options = {
+            root: __dirname + '/js/',
+            dotfiles: 'deny'
+        };
+        res.sendFile(req.params[0], options);
+    });
     RED.nodes.registerType("join-config",JoinConfigNode,{
         credentials: {
             apikey: {type:"text",required:true},
-            deviceName: {type:"text",value:"Node-RED",required:true}
+            deviceName: {type:"text",value:"Node-RED",required:true},
+            encryptionAccount: {type:"text",required:false},
+            encryptionKey: {type:"text",required:false}
         }
     });
 }

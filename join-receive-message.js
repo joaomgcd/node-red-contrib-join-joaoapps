@@ -3,15 +3,17 @@ var fetch = require('node-fetch');
 const AutoAppsCommand = require("./js/autoappscommand");
 const gcm = require("./js/gcm");
 const util = require("./js/util");
+const Encryption = require("./js/encryption.js");
 
 module.exports = function(RED) {
     function JoinReceiveMessageNode(config) {
         RED.nodes.createNode(this,config);
         var node = this;
         var server = RED.nodes.getNode(config.server);
+        const joinConfig =  RED.nodes.getNode(server.config.joinConfig);
         var variables = [];
 
-        var handleIncomingMessage = command => {
+        var handleIncomingMessage = async command => {
 
             var gcmMessage = gcm.getGcm(node,command);
             var isFullPush = gcmMessage && gcmMessage.push && gcmMessage.push.text;
@@ -24,6 +26,12 @@ module.exports = function(RED) {
 //            node.log(`Parsing command "${command}" with variables "${config.variables}"`);
             if(!util.isString(command)){
                 return node.error(`Received command must be a string, was of type ${typeof command}`)
+            }
+            const salt = joinConfig.salt;
+            const password = joinConfig.encryptionKey;
+            console.log("salt and pass",joinConfig,salt,password);
+            if(salt && password){
+                command = await Encryption.decrypt(command, password)
             }
             var autoAppsCommand = new AutoAppsCommand(command,config.variables,{
                 "parseNumbers": config.parseNumbers

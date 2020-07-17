@@ -2,6 +2,7 @@
 var Join = require("./js/join");
 var joinapi = require("./js/joinapi");
 const util = require("./js/util");
+const Encryption = require("./js/encryption.js");
 module.exports = function(RED) {
     function JoinMessageNode(config) {
         RED.nodes.createNode(this,config);
@@ -28,6 +29,18 @@ module.exports = function(RED) {
         	node.status({fill:"yellow",shape:"dot",text:"Sending..."});
             //node.log(`Sending push: ${JSON.stringify(push)}`)
             try{
+                
+                const password = joinConfig.encryptionKey;
+                const e = text => Encryption.encrypt(text,password);
+                push.text = await e(push.text);
+                push.url = await e(push.url);
+                push.smsnumber = await e(push.smsnumber);
+                push.smstext = await e(push.smstext);
+                push.clipboard = await e(push.clipboard);
+                push.file = await e(push.file);
+                push.files = await e(push.files);
+                push.wallpaper = await e(push.wallpaper);
+        
                 var result = await node.join.sendPush(push,null,{"node":node});
                 //node.log(`Push results - Sucess: ${result.success}; Failure: ${result.failure}`);
                 var failure = result.firstFailure;

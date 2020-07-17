@@ -1,4 +1,6 @@
+<script src="js/encryption.js"></script>
 <script type="text/javascript">
+    let password = null;
     RED.nodes.registerType('join-config',{
         category: 'config',
         color: '#a6bbcf',
@@ -11,9 +13,30 @@
         },
         credentials: {
             apikey: {type:"text", required:true},
-            deviceName: {type:"text", value:"Node-RED",required:true}
+            deviceName: {type:"text", value:"Node-RED",required:true},
+            encryptionAccount: {type:"text",required:false},
+            encryptionKey: {type:"text",required:false}
         },
         oneditprepare: function(){
+            $("#node-config-input-encryptionKey").change(()=>{
+                if(!password){
+                    password = $("#node-config-input-encryptionKey").val();
+                    return;
+                }
+                const currentValue = $("#node-config-input-encryptionKey").val();
+                if(currentValue == password) return;
+
+                password = currentValue
+                const salt = $("#node-config-input-encryptionAccount").val();
+                if(!password) return;
+
+                if(!salt){
+                    alert("Please set the encryption account as the account you used to sign-in to Join first.")
+                }
+
+                password = Encryption.encryptPasswordSync({password,salt,iterations:5000})
+                $("#node-config-input-encryptionKey").val(password)
+            });
             $("#node-config-input-registration").change(function() {
                 if($("#node-config-input-registration").is(":checked")){
                     $("#deviceNameDiv").show();
@@ -55,6 +78,14 @@
     <div class="form-row" id="deviceNameDiv">
         <label for="node-config-input-deviceName"><i class="fa fa-key"></i> Device Name</label>
         <input type="text" id="node-config-input-deviceName" placeholder="Device Name">
+    </div>
+    <div class="form-row" id="encryptionAccountDiv">
+        <label for="node-config-input-encryptionAccount"><i class="fa fa-key"></i> Encryption Account</label>
+        <input type="text" id="node-config-input-encryptionAccount" placeholder="Encryption Account">
+    </div>
+    <div class="form-row" id="encryptionPasswordDiv">
+        <label for="node-config-input-encryptionKey"><i class="fa fa-key"></i> Encryption Password</label>
+        <input type="text" id="node-config-input-encryptionKey" placeholder="Encryption Password">
     </div>
     <div class="form-row">
         <label for="node-config-input-name"><i class="icon-tag"></i> Name</label>
