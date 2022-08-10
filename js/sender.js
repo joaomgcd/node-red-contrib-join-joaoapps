@@ -1,5 +1,5 @@
 
-var fetch = require('node-fetch');
+const util = require("./util");
 const AutoAppsCommand = require("./autoappscommand");
 var extensions = require("./extensions");
 var joinapi = require("./joinapi");
@@ -75,10 +75,13 @@ class SenderGCM extends Sender{
 			}
 		}
 		var url = "https://fcm.googleapis.com/fcm/send";
-		return fetch(url, postOptions).then(result=>{
+		return util.fetch()
+		.then(fetch =>fetch(url, postOptions))
+		.then(result=>{
 			if(result.status == 200) return result.json();
 			return result.text().then(text => Promise.reject(text));
 		}).then(results=>{
+			console.log("GCM results:",results);
 			var finalResults = [];
 			for(var result of results.results){
 				var sendResult = null;
@@ -114,7 +117,9 @@ class SenderIP extends Sender {
 					options.secondTry = true;
 					return doForOneDevice(options);
 				}
-		    	return fetch(url,postOptions).then(result=>result.text()).then(getSucess).catch(getError)
+		    	return util.fetch()
+				.then(fetch =>fetch(url,postOptions))
+				.then(result=>result.text()).then(getSucess).catch(getError)
 			}
 			return doForOneDevice(options);
 		}))
@@ -151,7 +156,9 @@ class SenderIFTTT extends Sender {
 				}
 			}
 			//console.log(url);
-			return fetch(url,postOptions).then(result=>Sender.newSuccessResult).catch(error=>Sender.newSuccessResult).then(result => (new SendResults([result])));
+			return util.fetch()
+			.then(fetch =>fetch(url,postOptions))
+			.then(result=>Sender.newSuccessResult).catch(error=>Sender.newSuccessResult).then(result => (new SendResults([result])));
 		}));
 	}
 }

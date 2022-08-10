@@ -1,5 +1,3 @@
-
-var fetch = require('node-fetch');
 const AutoAppsCommand = require("./js/autoappscommand");
 const gcm = require("./js/gcm");
 const util = require("./js/util");

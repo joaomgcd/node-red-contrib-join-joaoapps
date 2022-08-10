@@ -1,5 +1,6 @@
 
-var fetch = require('node-fetch');
+const util = require("./util");
+
 module.exports = {
 	post : function(url, obj, node){
 		var options = {
@@ -12,7 +13,8 @@ module.exports = {
 		/*if(node){
 			node.log(`Posting: ${options.body}`)
 		}*/
-    	return fetch(url,options)
+    	return util.fetch()
+		.then(fetch=>fetch(url,options))		
     	.then(res=>res.json())
 	},
 	get : function(url, node){
@@ -22,7 +24,8 @@ module.exports = {
 				'Content-Type': 'application/json'
 			}
 		}
-    	return fetch(url)
+    	return util.fetch()
+		.then(fetch =>fetch(url))
     	.then(res=>res.json())
 	}
 }
