@@ -1,5 +1,6 @@
 
-const util = require("./util");
+const fetch = (...args) =>
+import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const AutoAppsCommand = require("./autoappscommand");
 var extensions = require("./extensions");
 var joinapi = require("./joinapi");

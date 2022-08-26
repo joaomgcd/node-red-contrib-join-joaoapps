@@ -1,3 +1,5 @@
+const fetch = (...args) =>
+  import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const AutoAppsCommand = require("./js/autoappscommand");
 const gcm = require("./js/gcm");
 const util = require("./js/util");
